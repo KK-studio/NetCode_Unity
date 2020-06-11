@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
-  ConversionTarget: -1
+  ConversionTarget: 3
   canDestroy: 0
 --- !u!4 &35558671
 Transform:
@@ -212,12 +212,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c75b8787d8624691813514d3823a59f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RootPath: \Scriptes\generated
+  RootPath: /Scriptes/generated
   SerializerCollectionPath: GhostSerializerCollection.cs
   DeserializerCollectionPath: GhostDeserializerCollection.cs
-  NamePrefix: New Unity Project
+  NamePrefix: NetCube
   Ghosts:
-  - prefab: {fileID: -5820461893820084816, guid: b57281f6eeda36d42805683fbf820015,
+  - prefab: {fileID: -8174090963493612609, guid: b57281f6eeda36d42805683fbf820015,
       type: 3}
     enabled: 1
 --- !u!1 &705507993
@@ -388,8 +388,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0.11416389, y: 0.8815712, z: -0.2744505, w: -0.36670956}
+  m_LocalPosition: {x: 32.995792, y: 24.226833, z: 30.057648}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

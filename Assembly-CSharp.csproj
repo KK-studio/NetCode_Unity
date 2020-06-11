@@ -61,7 +61,12 @@
      <Compile Include="Assets\Scriptes\generated\CubeGhostSerializer.cs" />
      <Compile Include="Assets\Scriptes\generated\CubeGhostUpdateSystem.cs" />
      <Compile Include="Assets\Scriptes\generated\CubeSnapshotData.cs" />
-     <Compile Include="Assets\Scriptes\test Scriptes\Movement.cs" />
+     <Compile Include="Assets\Scriptes\generated\GhostDeserializerCollection.cs" />
+     <Compile Include="Assets\Scriptes\generated\GhostSerializerCollection.cs" />
+     <Compile Include="Assets\Scriptes\test Scriptes\CubeInput.cs" />
+     <Compile Include="Assets\Scriptes\test Scriptes\Game.cs" />
+     <Compile Include="Assets\Scriptes\test Scriptes\MovementComponent.cs" />
+     <Compile Include="Assets\Scriptes\test Scriptes\MovementCubeSystem.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>D:/Projects/Unity/Main/KK/NetCode_Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

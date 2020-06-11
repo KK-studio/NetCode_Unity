@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.NetCode;
 
 [GenerateAuthoringComponent]
-public struct Movement : IComponentData
+public struct MovementComponent : IComponentData
 {
     [GhostDefaultField] public int ID;
 }

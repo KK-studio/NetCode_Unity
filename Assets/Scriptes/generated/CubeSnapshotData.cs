@@ -5,7 +5,7 @@ using Unity.Mathematics;
 public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
 {
     public uint tick;
-    private int MovementID;
+    private int MovementComponentID;
     private int RotationValueX;
     private int RotationValueY;
     private int RotationValueZ;
@@ -16,21 +16,21 @@ public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
     uint changeMask0;
 
     public uint Tick => tick;
-    public int GetMovementID(GhostDeserializerState deserializerState)
+    public int GetMovementComponentID(GhostDeserializerState deserializerState)
     {
-        return (int)MovementID;
+        return (int)MovementComponentID;
     }
-    public int GetMovementID()
+    public int GetMovementComponentID()
     {
-        return (int)MovementID;
+        return (int)MovementComponentID;
     }
-    public void SetMovementID(int val, GhostSerializerState serializerState)
+    public void SetMovementComponentID(int val, GhostSerializerState serializerState)
     {
-        MovementID = (int)val;
+        MovementComponentID = (int)val;
     }
-    public void SetMovementID(int val)
+    public void SetMovementComponentID(int val)
     {
-        MovementID = (int)val;
+        MovementComponentID = (int)val;
     }
     public quaternion GetRotationValue(GhostDeserializerState deserializerState)
     {
@@ -73,7 +73,7 @@ public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
     public void PredictDelta(uint tick, ref CubeSnapshotData baseline1, ref CubeSnapshotData baseline2)
     {
         var predictor = new GhostDeltaPredictor(tick, this.tick, baseline1.tick, baseline2.tick);
-        MovementID = predictor.PredictInt(MovementID, baseline1.MovementID, baseline2.MovementID);
+        MovementComponentID = predictor.PredictInt(MovementComponentID, baseline1.MovementComponentID, baseline2.MovementComponentID);
         RotationValueX = predictor.PredictInt(RotationValueX, baseline1.RotationValueX, baseline2.RotationValueX);
         RotationValueY = predictor.PredictInt(RotationValueY, baseline1.RotationValueY, baseline2.RotationValueY);
         RotationValueZ = predictor.PredictInt(RotationValueZ, baseline1.RotationValueZ, baseline2.RotationValueZ);
@@ -85,7 +85,7 @@ public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
 
     public void Serialize(int networkId, ref CubeSnapshotData baseline, ref DataStreamWriter writer, NetworkCompressionModel compressionModel)
     {
-        changeMask0 = (MovementID != baseline.MovementID) ? 1u : 0;
+        changeMask0 = (MovementComponentID != baseline.MovementComponentID) ? 1u : 0;
         changeMask0 |= (RotationValueX != baseline.RotationValueX ||
                                            RotationValueY != baseline.RotationValueY ||
                                            RotationValueZ != baseline.RotationValueZ ||
@@ -95,7 +95,7 @@ public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
                                            TranslationValueZ != baseline.TranslationValueZ) ? (1u<<2) : 0;
         writer.WritePackedUIntDelta(changeMask0, baseline.changeMask0, compressionModel);
         if ((changeMask0 & (1 << 0)) != 0)
-            writer.WritePackedIntDelta(MovementID, baseline.MovementID, compressionModel);
+            writer.WritePackedIntDelta(MovementComponentID, baseline.MovementComponentID, compressionModel);
         if ((changeMask0 & (1 << 1)) != 0)
         {
             writer.WritePackedIntDelta(RotationValueX, baseline.RotationValueX, compressionModel);
@@ -117,9 +117,9 @@ public struct CubeSnapshotData : ISnapshotData<CubeSnapshotData>
         this.tick = tick;
         changeMask0 = reader.ReadPackedUIntDelta(baseline.changeMask0, compressionModel);
         if ((changeMask0 & (1 << 0)) != 0)
-            MovementID = reader.ReadPackedIntDelta(baseline.MovementID, compressionModel);
+            MovementComponentID = reader.ReadPackedIntDelta(baseline.MovementComponentID, compressionModel);
         else
-            MovementID = baseline.MovementID;
+            MovementComponentID = baseline.MovementComponentID;
         if ((changeMask0 & (1 << 1)) != 0)
         {
             RotationValueX = reader.ReadPackedIntDelta(baseline.RotationValueX, compressionModel);

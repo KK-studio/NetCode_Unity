@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4953459542194678510}
   - component: {fileID: 8003511145486298176}
   - component: {fileID: 5464490560977652152}
-  - component: {fileID: -5820461893820084816}
-  - component: {fileID: -8403211088654923367}
+  - component: {fileID: -8174090963493612609}
+  - component: {fileID: -7951779954376143215}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7767943006045797424}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 40, z: 40}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,7 +95,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-5820461893820084816
+--- !u!114 &-8174090963493612609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,15 +107,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c79d771cedb4794bf100ce60df5f764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultClientInstantiationType: 0
+  DefaultClientInstantiationType: 2
   RootPath: /Scriptes/generated
   SnapshotDataPath: CubeSnapshotData.cs
   UpdateSystemPath: CubeGhostUpdateSystem.cs
   SerializerPath: CubeGhostSerializer.cs
   Importance: 1
-  PredictingPlayerNetworkId: 
+  PredictingPlayerNetworkId: MovementComponent.ID
   Components:
-  - name: Movement
+  - name: MovementComponent
     interpolatedClient: 1
     predictedClient: 1
     server: 1
@@ -191,7 +191,7 @@ MonoBehaviour:
   prefabId: b57281f6eeda36d42805683fbf820015
   Name: Cube
   doNotStrip: 0
---- !u!114 &-8403211088654923367
+--- !u!114 &-7951779954376143215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

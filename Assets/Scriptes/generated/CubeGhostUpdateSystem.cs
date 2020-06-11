@@ -24,7 +24,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
 #endif
         [ReadOnly] public ArchetypeChunkBufferType<CubeSnapshotData> ghostSnapshotDataType;
         [ReadOnly] public ArchetypeChunkEntityType ghostEntityType;
-        public ArchetypeChunkComponentType<Movement> ghostMovementType;
+        public ArchetypeChunkComponentType<MovementComponent> ghostMovementComponentType;
         public ArchetypeChunkComponentType<Rotation> ghostRotationType;
         public ArchetypeChunkComponentType<Translation> ghostTranslationType;
 
@@ -38,7 +38,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
             };
             var ghostEntityArray = chunk.GetNativeArray(ghostEntityType);
             var ghostSnapshotDataArray = chunk.GetBufferAccessor(ghostSnapshotDataType);
-            var ghostMovementArray = chunk.GetNativeArray(ghostMovementType);
+            var ghostMovementComponentArray = chunk.GetNativeArray(ghostMovementComponentType);
             var ghostRotationArray = chunk.GetNativeArray(ghostRotationType);
             var ghostTranslationArray = chunk.GetNativeArray(ghostTranslationType);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -62,13 +62,13 @@ public class CubeGhostUpdateSystem : JobComponentSystem
                 if (!snapshot.GetDataAtTick(targetTick, targetTickFraction, out snapshotData))
                     return;
 
-                var ghostMovement = ghostMovementArray[entityIndex];
+                var ghostMovementComponent = ghostMovementComponentArray[entityIndex];
                 var ghostRotation = ghostRotationArray[entityIndex];
                 var ghostTranslation = ghostTranslationArray[entityIndex];
-                ghostMovement.ID = snapshotData.GetMovementID(deserializerState);
+                ghostMovementComponent.ID = snapshotData.GetMovementComponentID(deserializerState);
                 ghostRotation.Value = snapshotData.GetRotationValue(deserializerState);
                 ghostTranslation.Value = snapshotData.GetTranslationValue(deserializerState);
-                ghostMovementArray[entityIndex] = ghostMovement;
+                ghostMovementComponentArray[entityIndex] = ghostMovementComponent;
                 ghostRotationArray[entityIndex] = ghostRotation;
                 ghostTranslationArray[entityIndex] = ghostTranslation;
             }
@@ -89,7 +89,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
         [ReadOnly] public ArchetypeChunkBufferType<CubeSnapshotData> ghostSnapshotDataType;
         [ReadOnly] public ArchetypeChunkEntityType ghostEntityType;
         public ArchetypeChunkComponentType<PredictedGhostComponent> predictedGhostComponentType;
-        public ArchetypeChunkComponentType<Movement> ghostMovementType;
+        public ArchetypeChunkComponentType<MovementComponent> ghostMovementComponentType;
         public ArchetypeChunkComponentType<Rotation> ghostRotationType;
         public ArchetypeChunkComponentType<Translation> ghostTranslationType;
         public uint targetTick;
@@ -103,7 +103,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
             var ghostEntityArray = chunk.GetNativeArray(ghostEntityType);
             var ghostSnapshotDataArray = chunk.GetBufferAccessor(ghostSnapshotDataType);
             var predictedGhostComponentArray = chunk.GetNativeArray(predictedGhostComponentType);
-            var ghostMovementArray = chunk.GetNativeArray(ghostMovementType);
+            var ghostMovementComponentArray = chunk.GetNativeArray(ghostMovementComponentType);
             var ghostRotationArray = chunk.GetNativeArray(ghostRotationType);
             var ghostTranslationArray = chunk.GetNativeArray(ghostTranslationType);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -137,13 +137,13 @@ public class CubeGhostUpdateSystem : JobComponentSystem
                 if (lastPredictedTickInst != snapshotData.Tick)
                     continue;
 
-                var ghostMovement = ghostMovementArray[entityIndex];
+                var ghostMovementComponent = ghostMovementComponentArray[entityIndex];
                 var ghostRotation = ghostRotationArray[entityIndex];
                 var ghostTranslation = ghostTranslationArray[entityIndex];
-                ghostMovement.ID = snapshotData.GetMovementID(deserializerState);
+                ghostMovementComponent.ID = snapshotData.GetMovementComponentID(deserializerState);
                 ghostRotation.Value = snapshotData.GetRotationValue(deserializerState);
                 ghostTranslation.Value = snapshotData.GetTranslationValue(deserializerState);
-                ghostMovementArray[entityIndex] = ghostMovement;
+                ghostMovementComponentArray[entityIndex] = ghostMovementComponent;
                 ghostRotationArray[entityIndex] = ghostRotation;
                 ghostTranslationArray[entityIndex] = ghostTranslation;
             }
@@ -165,7 +165,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
             All = new []{
                 ComponentType.ReadWrite<CubeSnapshotData>(),
                 ComponentType.ReadOnly<GhostComponent>(),
-                ComponentType.ReadWrite<Movement>(),
+                ComponentType.ReadWrite<MovementComponent>(),
                 ComponentType.ReadWrite<Rotation>(),
                 ComponentType.ReadWrite<Translation>(),
             },
@@ -177,7 +177,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
                 ComponentType.ReadOnly<CubeSnapshotData>(),
                 ComponentType.ReadOnly<GhostComponent>(),
                 ComponentType.ReadOnly<PredictedGhostComponent>(),
-                ComponentType.ReadWrite<Movement>(),
+                ComponentType.ReadWrite<MovementComponent>(),
                 ComponentType.ReadWrite<Rotation>(),
                 ComponentType.ReadWrite<Translation>(),
             }
@@ -203,7 +203,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
                 ghostSnapshotDataType = GetArchetypeChunkBufferType<CubeSnapshotData>(true),
                 ghostEntityType = GetArchetypeChunkEntityType(),
                 predictedGhostComponentType = GetArchetypeChunkComponentType<PredictedGhostComponent>(),
-                ghostMovementType = GetArchetypeChunkComponentType<Movement>(),
+                ghostMovementComponentType = GetArchetypeChunkComponentType<MovementComponent>(),
                 ghostRotationType = GetArchetypeChunkComponentType<Rotation>(),
                 ghostTranslationType = GetArchetypeChunkComponentType<Translation>(),
 
@@ -226,7 +226,7 @@ public class CubeGhostUpdateSystem : JobComponentSystem
 #endif
                 ghostSnapshotDataType = GetArchetypeChunkBufferType<CubeSnapshotData>(true),
                 ghostEntityType = GetArchetypeChunkEntityType(),
-                ghostMovementType = GetArchetypeChunkComponentType<Movement>(),
+                ghostMovementComponentType = GetArchetypeChunkComponentType<MovementComponent>(),
                 ghostRotationType = GetArchetypeChunkComponentType<Rotation>(),
                 ghostTranslationType = GetArchetypeChunkComponentType<Translation>(),
                 targetTick = m_ClientSimulationSystemGroup.InterpolationTick,
@@ -239,4 +239,26 @@ public class CubeGhostUpdateSystem : JobComponentSystem
 }
 public partial class CubeGhostSpawnSystem : DefaultGhostSpawnSystem<CubeSnapshotData>
 {
+    struct SetPredictedDefault : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<CubeSnapshotData> snapshots;
+        public NativeArray<int> predictionMask;
+        [ReadOnly][DeallocateOnJobCompletion] public NativeArray<NetworkIdComponent> localPlayerId;
+        public void Execute(int index)
+        {
+            if (localPlayerId.Length == 1 && snapshots[index].GetMovementComponentID() == localPlayerId[0].Value)
+                predictionMask[index] = 1;
+        }
+    }
+    protected override JobHandle SetPredictedGhostDefaults(NativeArray<CubeSnapshotData> snapshots, NativeArray<int> predictionMask, JobHandle inputDeps)
+    {
+        JobHandle playerHandle;
+        var job = new SetPredictedDefault
+        {
+            snapshots = snapshots,
+            predictionMask = predictionMask,
+            localPlayerId = m_PlayerGroup.ToComponentDataArrayAsync<NetworkIdComponent>(Allocator.TempJob, out playerHandle),
+        };
+        return job.Schedule(predictionMask.Length, 8, JobHandle.CombineDependencies(playerHandle, inputDeps));
+    }
 }
